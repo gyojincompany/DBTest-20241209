@@ -41,7 +41,7 @@ elif menuNum == 2:
     memberemail = input("4) 수정하실 회원 이메일을 입력하세요 : ")
     memberage = input("5) 수정하실 회원님의 나이를 입력하세요 : ")
 
-    sql = f"UPDATE membertbl SET WHERE memberpw='{memberpw}', membername='{membername}', memberemil='{memberemail}', memberage='{memberage}' WHERE memberid='{memberid}'"
+    sql = f"UPDATE membertbl SET WHERE memberpw='{memberpw}', membername='{membername}', memberemail='{memberemail}', memberage='{memberage}' WHERE memberid='{memberid}'"
 
     cur = conn.cursor()
     resultNum = cur.execute(sql)
