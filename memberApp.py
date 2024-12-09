@@ -11,6 +11,9 @@ class MainWindow(QMainWindow, form_class):
         self.setupUi(self)
         self.setWindowTitle("회원 관리 프로그램 v1.0")
 
+        self.join_btn.clicked.connect(self.member_join)  # 회원가입 버튼이 클릭되면 member_join 함수 호출
+        self.idcheck_btn.clicked.connect(self.id_check)  # 아이디 체크 버튼이 클릭되면 id_check 함수 호출
+
 
     def sql_excute(self, sql):  # sql을 입력 받아 실행해주는 함수(insert, update, delete)
         conn = pymysql.connect(host="localhost", user="root", password="12345", db="member_addr")
@@ -35,6 +38,52 @@ class MainWindow(QMainWindow, form_class):
         conn.close()
 
         return records  # SQL문에서 실행된 select문의 결과(record)를 함수 호출시에 반환
+    
+    def id_check(self):  # 아이디의 존재여부 확인 함수
+        memberid = self.joinid_input.text()  # user가 입력한 회원아이디 텍스트 가져오기
+
+        if memberid == "":
+            QMessageBox.warning(self, "정보 입력 오류!", "아이디는 필수 입력사항 입니다.")
+        else:
+            sql = f"SELECT count(*) FROM membertbl WHERE memberid='{memberid}'"  # 조건에 맞는 레코드의 개수를 반환
+            result = self.sql_select_execute(sql)
+            # print(result) -> ((0,),) or ((1,),)
+            if result[0][0] == 1:
+                QMessageBox.warning(self, "회원 가입 불가!", "이미 가입된 아이디 입니다.\n다른 아이디를 입력하세요.")
+            else:
+                QMessageBox.information(self, "회원 가입 가능!", "회원 가입 가능한 아이디 입니다.")
+
+        return result[0][0]  # 1 or 0
+
+    def member_join(self):  # 새로운 회원 가입 insert 함수
+        memberid = self.joinid_input.text()  # user가 입력한 회원아이디 텍스트 가져오기
+        memberpw = self.joinpw_input.text()  # user가 입력한 회원비밀번호 텍스트 가져오기
+        membername = self.joinname_input.text()  # user가 입력한 회원이름 텍스트 가져오기
+        memberemail = self.joinemail_input.text()  # user가 입력한 회원이메일 텍스트 가져오기
+        memberaddress = self.joinaddress_input.text()  # user가 입력한 회원주소 텍스트 가져오기
+        memberphone = self.joinphone_input.text()  # user가 입력한 회원전화번호 텍스트 가져오기
+
+        # sql문이 만들어지기 전 유효성 체크(validation)
+        if memberid == "" or memberpw == "" or membername == "" or memberemail == "" or memberaddress == "" or memberphone == "":
+            QMessageBox.warning(self, "정보 입력 오류!","가입시 모든 회원 정보란을 입력하여야 합니다.")
+        # 아이디를 4자 이상 10자 이하만 허용
+        elif len(memberid) < 4 or len(memberid) > 10:
+            QMessageBox.warning(self, "아이디 입력 오류!", "아이디는 4자 이상 10자 이하이어야 합니다.")
+        elif len(memberpw) < 4 or len(memberpw) > 10:
+            QMessageBox.warning(self, "비밀번호 입력 오류!", "비밀번호는 4자 이상 10자 이하이어야 합니다.")
+        elif len(memberphone) < 10 or len(memberpw) > 11:
+            QMessageBox.warning(self, "전화번호 입력 오류!", "전화번호는 -를 제외한 숫자만 넣어주세요.")
+        else:
+            sql = f"INSERT INTO membertbl VALUES ('{memberid}','{memberpw}','{membername}','{memberemail}','{memberaddress}','{memberphone}')"
+            checkFlag = self.id_check()  # 경고창 발생->가입가능 0, 가입불가 1 반환
+            if checkFlag == 0:
+                resultNum = self.sql_excute(sql)  # sql을 실행하는 함수->성공하면 1을 반환
+
+                if resultNum == 1:
+                    QMessageBox.information(self, "회원 가입 성공!", "회원 가입을 축하드립니다.")
+                else:
+                    QMessageBox.warning(self, "회원 가입 실패!", "회원 가입이 실패하였습니다.\n다시 확인해 주세요.")
+
 
 app = QApplication(sys.argv)
 win = MainWindow()
