@@ -20,6 +20,10 @@ class MainWindow(QMainWindow, form_class):
         self.login_btn.clicked.connect(self.login_check)  # 로그인 탭 로그인 버튼 클릭되면 login_check 함수 호출
         self.login_reset_btn.clicked.connect(self.login_reset)  # 로그인 탭 로그인 정보 삭제 login_reset 함수 호출
 
+        # 회원 조회 탭
+        self.search_btn.clicked.connect(self.member_search)
+        # 회원 조회 탭 회원조회 버튼 클릭시 회원 존재여부 확인 member_search 함수 호출
+        self.search_reset_btn.clicked.connect(self.search_reset)  # 회원 조회 탭 입력 정보 초기화
 
     def sql_excute(self, sql):  # sql을 입력 받아 실행해주는 함수(insert, update, delete)
         conn = pymysql.connect(host="localhost", user="root", password="12345", db="member_addr")
@@ -121,6 +125,41 @@ class MainWindow(QMainWindow, form_class):
     def login_reset(self):  # 로그인 탭 입력창 초기화
         self.loginid_input.clear()
         self.loginpw_input.clear()
+
+    def member_search(self):  # 회원 정보 조회 함수
+        memberid = self.searchid_input.text()  # 회원 조회 탭에서 입력된 아이디 가져오기
+        if memberid == "":
+            QMessageBox.warning(self, "정보 입력 오류!", "아이디는 필수 입력사항 입니다.")
+        else:
+            sql = f"SELECT * FROM membertbl WHERE memberid='{memberid}'"  # 해당 아이디의 모든 필드값 가져오기
+            result = self.sql_select_execute(sql)
+            # print(result) -> () or (('tiger','12345','홍길동',.....)
+            try:
+                # if result == ():
+                #     print("없는 아이디 확인 성공")
+                if result != ():
+                    result = self.sql_select_execute(sql)
+                    self.searchpw_input.setText(result[0][1])  # 비밀번호 출력
+                    self.searchname_input.setText(result[0][2])  # 이름 출력
+                    self.searchemail_input.setText(result[0][3])  # 이메일 출력
+                    self.searchaddress_input.setText(result[0][4])  # 주소 출력
+                    self.searchphone_input.setText(result[0][5])  # 전화번호 출력
+                else:
+                    QMessageBox.warning(self, "정보 입력 오류!", "가입되지 않은 회원 아이디입니다.")
+                    self.search_reset()  # 회원 정보 출력 내용 삭제
+            except:
+                QMessageBox.warning(self, "정보 입력 오류!", "회원 조회 실패 오류 발생.")
+
+        return result
+
+    def search_reset(self):  # 회원 조회 탭 초기화
+        self.searchid_input.clear()
+        self.searchpw_input.clear()
+        self.searchname_input.clear()
+        self.searchemail_input.clear()
+        self.searchaddress_input.clear()
+        self.searchphone_input.clear()
+        
 
 
 app = QApplication(sys.argv)
