@@ -12,7 +12,7 @@ print("0 : 프로그램 종료")
 print("******************************************")
 menuNum = input("메뉴 중 한 가지를 선택하세요(0~5) : ")
 
-if menuNum == 1:
+if menuNum == "1":
     print("회원 정보를 입력하세요.")
     memberid = input("1) 가입하실 회원 아이디를 입력하세요 : ")
     memberpw = input("2) 비밀번호를 입력하세요 : ")
@@ -33,7 +33,7 @@ if menuNum == 1:
     conn.commit()  # insert->commit 필수
     conn.close()
 
-elif menuNum == 2:
+elif menuNum == "2":
     print("수정하실 회원 정보를 입력하세요.")
     memberid = input("1) 정보를 수정하실 회원 아이디를 입력하세요 : ")
     memberpw = input("2) 수정하실 비밀번호를 입력하세요 : ")
@@ -41,7 +41,7 @@ elif menuNum == 2:
     memberemail = input("4) 수정하실 회원 이메일을 입력하세요 : ")
     memberage = input("5) 수정하실 회원님의 나이를 입력하세요 : ")
 
-    sql = f"UPDATE membertbl SET WHERE memberpw='{memberpw}', membername='{membername}', memberemail='{memberemail}', memberage='{memberage}' WHERE memberid='{memberid}'"
+    sql = f"UPDATE membertbl SET memberpw='{memberpw}', membername='{membername}', memberemail='{memberemail}', memberage='{memberage}' WHERE memberid='{memberid}'"
 
     cur = conn.cursor()
     resultNum = cur.execute(sql)
@@ -53,3 +53,9 @@ elif menuNum == 2:
     cur.close()
     conn.commit()  # insert->commit 필수
     conn.close()
+
+elif menuNum == "0":
+    print("프로그램을 종료합니다. 안녕히 가세요.")
+
+else:
+    print("잘못 입력하셨습니다. 다시 입력해주세요.")
