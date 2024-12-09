@@ -13,7 +13,7 @@ class MainWindow(QMainWindow, form_class):
 
         self.join_btn.clicked.connect(self.member_join)  # 회원가입 버튼이 클릭되면 member_join 함수 호출
         self.idcheck_btn.clicked.connect(self.id_check)  # 아이디 체크 버튼이 클릭되면 id_check 함수 호출
-        self.join_reset_btn.clicked.connect(self.login_reset)  # 회원가입 탭 초기화 버튼이 클릭되면 login_reset 함수 호출
+        self.join_reset_btn.clicked.connect(self.join_reset)  # 회원가입 탭 초기화 버튼이 클릭되면 login_reset 함수 호출
 
 
     def sql_excute(self, sql):  # sql을 입력 받아 실행해주는 함수(insert, update, delete)
@@ -82,10 +82,11 @@ class MainWindow(QMainWindow, form_class):
 
                 if resultNum == 1:
                     QMessageBox.information(self, "회원 가입 성공!", "회원 가입을 축하드립니다.")
+                    self.join_reset()  # 입력 내용 초기화
                 else:
                     QMessageBox.warning(self, "회원 가입 실패!", "회원 가입이 실패하였습니다.\n다시 확인해 주세요.")
 
-    def login_reset(self):
+    def join_reset(self):
         self.joinid_input.clear()  # user가 입력한 회원아이디 텍스트 지우기
         self.joinpw_input.clear()  # user가 입력한 회원비밀번호 텍스트 지우기
         self.joinname_input.clear()  # user가 입력한 회원이름 텍스트 지우기
