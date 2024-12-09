@@ -586,6 +586,35 @@ color: rgb(255, 255, 255);</string>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>loginid_input</tabstop>
+  <tabstop>loginpw_input</tabstop>
+  <tabstop>login_btn</tabstop>
+  <tabstop>login_reset_btn</tabstop>
+  <tabstop>joinid_input</tabstop>
+  <tabstop>idcheck_btn</tabstop>
+  <tabstop>joinpw_input</tabstop>
+  <tabstop>joinname_input</tabstop>
+  <tabstop>joinemail_input</tabstop>
+  <tabstop>joinaddress_input</tabstop>
+  <tabstop>joinphone_input</tabstop>
+  <tabstop>join_btn</tabstop>
+  <tabstop>join_reset_btn</tabstop>
+  <tabstop>search_reset_btn</tabstop>
+  <tabstop>modify_btn</tabstop>
+  <tabstop>searchname_input</tabstop>
+  <tabstop>searchphone_input</tabstop>
+  <tabstop>searchaddress_input</tabstop>
+  <tabstop>searchid_input</tabstop>
+  <tabstop>searchpw_input</tabstop>
+  <tabstop>search_btn</tabstop>
+  <tabstop>searchemail_input</tabstop>
+  <tabstop>delete_reset_btn</tabstop>
+  <tabstop>deleteid_input</tabstop>
+  <tabstop>deletepw_input</tabstop>
+  <tabstop>delete_btn</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
