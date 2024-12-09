@@ -69,6 +69,25 @@ elif menuNum == "3":
     cur.close()
     conn.commit()  # insert->commit 필수
     conn.close()
+
+elif menuNum == "4":
+
+    sql = f"SELECT * FROM membertbl"
+
+    cur = conn.cursor()
+    cur.execute(sql)
+    memberAllList = cur.fetchall()
+
+    print("============ 전체 회원 리스트 =============")
+    for member in memberAllList:
+        print(member[0], end=" / ")  # 다음 줄 출력 내용을 한 줄로 이어주는 end 옵션 추가
+        print(member[1], end=" / ")
+        print(member[2], end=" / ")
+        print(member[3], end=" / ")
+        print(member[4])
+
+    cur.close()
+    conn.close()
     
 
 elif menuNum == "0":
