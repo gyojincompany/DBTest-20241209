@@ -54,6 +54,23 @@ elif menuNum == "2":
     conn.commit()  # insert->commit 필수
     conn.close()
 
+elif menuNum == "3":    
+    memberid = input("1) 탈퇴하실 회원 아이디를 입력하세요 : ")    
+
+    sql = f"DELETE FROM membertbl WHERE memberid='{memberid}'"
+
+    cur = conn.cursor()
+    resultNum = cur.execute(sql)
+    if resultNum == 1:
+        print("회원 탈퇴 성공하셨습니다. 안녕히 가세요.")
+    else:
+        print("회원 탈퇴 실패입니다! 다시 확인하세요.")
+
+    cur.close()
+    conn.commit()  # insert->commit 필수
+    conn.close()
+    
+
 elif menuNum == "0":
     print("프로그램을 종료합니다. 안녕히 가세요.")
 
