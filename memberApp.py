@@ -11,9 +11,14 @@ class MainWindow(QMainWindow, form_class):
         self.setupUi(self)
         self.setWindowTitle("회원 관리 프로그램 v1.0")
 
+        # 회원 가입 탭
         self.join_btn.clicked.connect(self.member_join)  # 회원가입 버튼이 클릭되면 member_join 함수 호출
         self.idcheck_btn.clicked.connect(self.id_check)  # 아이디 체크 버튼이 클릭되면 id_check 함수 호출
-        self.join_reset_btn.clicked.connect(self.join_reset)  # 회원가입 탭 초기화 버튼이 클릭되면 login_reset 함수 호출
+        self.join_reset_btn.clicked.connect(self.join_reset)  # 회원가입 탭 초기화 버튼이 클릭되면 join_reset 함수 호출
+
+        # 로그인 탭
+        self.login_btn.clicked.connect(self.login_check)  # 로그인 탭 로그인 버튼 클릭되면 login_check 함수 호출
+        self.login_reset_btn.clicked.connect(self.login_reset)  # 로그인 탭 로그인 정보 삭제 login_reset 함수 호출
 
 
     def sql_excute(self, sql):  # sql을 입력 받아 실행해주는 함수(insert, update, delete)
@@ -86,13 +91,37 @@ class MainWindow(QMainWindow, form_class):
                 else:
                     QMessageBox.warning(self, "회원 가입 실패!", "회원 가입이 실패하였습니다.\n다시 확인해 주세요.")
 
-    def join_reset(self):
+    def join_reset(self):  # 회원 가입 탭 입력 정보 삭제(초기화)
         self.joinid_input.clear()  # user가 입력한 회원아이디 텍스트 지우기
         self.joinpw_input.clear()  # user가 입력한 회원비밀번호 텍스트 지우기
         self.joinname_input.clear()  # user가 입력한 회원이름 텍스트 지우기
         self.joinemail_input.clear()  # user가 입력한 회원이메일 텍스트 지우기
         self.joinaddress_input.clear()  # user가 입력한 회원주소 텍스트 지우기
         self.joinphone_input.clear()  # user가 입력한 회원전화번호 텍스트 지우기
+
+    def login_check(self):  # 로그인 확인 함수
+        loginid = self.loginid_input.text()  # user가 입력한 로그인 아이디 텍스트 가져오기
+        loginpw = self.loginpw_input.text()  # user가 입력한 로그인 비밀번호 텍스트 가져오기
+
+        if loginid == "" or loginpw == "":
+            QMessageBox.warning(self, "로그인 오류!","아이디와 비밀번호는 필수 입력사항 입니다.")
+        else:
+            sql = f"SELECT count(*) FROM membertbl WHERE memberid='{loginid}' AND memberpw='{loginpw}'"
+            # 로그인 여부 SQL -> 1이 반환되면 로그인 성공, 0이 반환되면 로그인 실패
+            result = self.sql_select_execute(sql)
+            if result[0][0] == 1:
+                QMessageBox.information(self, "로그인 성공!", "로그인 성공하였습니다.")
+                self.login_reset()  # 로그인 성공 후 입력 내용 제거
+                self.login_label.setText(f"{loginid}님 로그인 중")
+            else:
+                QMessageBox.warning(self, "로그인 실패!", "로그인 실패하였습니다.\n아이디 또는 비밀번호가 잘못 되었습니다.")
+
+        return result[0][0]  # 1 or 0
+
+    def login_reset(self):  # 로그인 탭 입력창 초기화
+        self.loginid_input.clear()
+        self.loginpw_input.clear()
+
 
 app = QApplication(sys.argv)
 win = MainWindow()
