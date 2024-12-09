@@ -88,6 +88,27 @@ elif menuNum == "4":
 
     cur.close()
     conn.close()
+
+elif menuNum == "5":
+
+    memberid = input("1) 조회하실 회원 아이디를 입력하세요 : ")
+
+    sql = f"SELECT * FROM membertbl WHERE memberid='{memberid}'"
+
+    cur = conn.cursor()
+    cur.execute(sql)
+    memberAllList = cur.fetchall()
+
+    print("============ 회원 조회 정보 =============")
+    for member in memberAllList:
+        print(member[0], end=" / ")  # 다음 줄 출력 내용을 한 줄로 이어주는 end 옵션 추가
+        print(member[1], end=" / ")
+        print(member[2], end=" / ")
+        print(member[3], end=" / ")
+        print(member[4])
+
+    cur.close()
+    conn.close()
     
 
 elif menuNum == "0":
